@@ -1,0 +1,182 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Create directories for course
+        run: |
+          mkdir -p course-materials/lectures
+          mkdir -p course-materials/exercises
+          mkdir -p course-materials/resources
+          mkdir -p practical-lab-work
+          mkdir -p web-portal
+          mkdir -p web-portal/css
+          mkdir -p web-portal/js
+          mkdir -p web-portal/assets
+
+      - name: Verify directory structure
+        run: |
+          ls -la course-materials
+          ls -la course-materials/lectures
+          ls -la course-materials/exercises
+          ls -la course-materials/resources
+          ls -la practical-lab-work
+          ls -la web-portal
+
+      - name: Create initial course files
+        run: |
+          echo "# Lectures" > course-materials/lectures/README.md
+          echo "# Exercises" > course-materials/exercises/README.md
+          echo "# Resources" > course-materials/resources/README.md
+          echo "# Practical Lab Work" > practical-lab-work/README.md
+          echo '
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Mobile App Development for Juniors</title>
+                <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
+                <link rel="stylesheet" href="css/styles.css">
+                <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+            </head>
+            <body>
+                <header>
+                    <h1>Mobile App Development for Juniors</h1>
+                    <h2>Course Code: MADJ101</h2>
+                    <h3>Building Foundational Skills for Future App Developers</h3>
+                </header>
+                <nav>
+                    <ul>
+                        <li><a href="lectures.html">Lectures</a></li>
+                        <li><a href="exercises.html">Exercises</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="practical-lab.html">Practical Lab Work</a></li>
+                    </ul>
+                </nav>
+                <main>
+                    <section id="content">
+                        <h2>Welcome to the Course Portal</h2>
+                        <p>Navigate through the sections to access course materials and lab exercises.</p>
+                        <div id="auth-container">
+                            <div id="login-form">
+                                <h3>Login</h3>
+                                <input type="email" id="login-email" placeholder="Email">
+                                <input type="password" id="login-password" placeholder="Password">
+                                <button onclick="login()">Login</button>
+                            </div>
+                            <div id="register-form">
+                                <h3>Register</h3>
+                                <input type="email" id="register-email" placeholder="Email">
+                                <input type="password" id="register-password" placeholder="Password">
+                                <button onclick="register()">Register</button>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+                <footer>
+                    <p>&copy; 2024 Skunkworks (Pty) Ltd. All rights reserved.</p>
+                </footer>
+                <script src="js/scripts.js"></script>
+            </body>
+            </html>
+          ' > web-portal/index.html
+
+      - name: Create CSS file
+        run: |
+          echo '
+          /* CSS styles for the course portal */
+          body {
+              font-family: "IBM Plex Sans", sans-serif;
+              background-color: #f4f4f9;
+              color: #333;
+              margin: 0;
+              padding: 0;
+          }
+          header {
+              background-color: #1a73e8;
+              color: white;
+              text-align: center;
+              padding: 20px 0;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          }
+          header h1 {
+              font-size: 2.5em;
+              margin: 0.2em 0;
+              font-weight: 700;
+          }
+          header h2 {
+              font-size: 1.2em;
+              margin: 0.2em 0;
+              font-weight: 400;
+          }
+          header h3 {
+              font-size: 1em;
+              margin: 0.2em 0;
+              font-weight: 400;
+          }
+          nav ul {
+              list-style: none;
+              padding: 0;
+              display: flex;
+              justify-content: center;
+              background-color: #1a73e8;
+              margin: 0;
+          }
+          nav ul li {
+              margin: 0 15px;
+          }
+          nav ul li a {
+              color: white;
+              text-decoration: none;
+              font-weight: 700;
+          }
+          nav ul li a:hover {
+              text-decoration: underline;
+          }
+          main {
+              padding: 20px;
+          }
+          footer {
+              text-align: center;
+              padding: 10px 0;
+              background-color: #1a73e8;
+              color: white;
+              position: fixed;
+              width: 100%;
+              bottom: 0;
+          }
+          ' > web-portal/css/styles.css
+
+      - name: Create JavaScript file
+        run: |
+          echo '
+          // Firebase configuration
+          const firebaseConfig = {
+              apiKey: "YOUR_FIREBASE_API_KEY",
+              authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
+              projectId: "YOUR_FIREBASE_PROJECT_ID",
+              storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
+              messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
+              appId: "YOUR_FIREBASE_APP_ID"
+          };
+
+          // Initialize Firebase
+          firebase.initializeApp(firebaseConfig));
