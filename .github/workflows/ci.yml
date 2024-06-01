@@ -21,6 +21,23 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Create package.json if it does not exist
+        run: |
+          if [ ! -f package.json ]; then
+            echo '{
+              "name": "madj101",
+              "version": "1.0.0",
+              "description": "Mobile App Development for Juniors",
+              "main": "index.js",
+              "scripts": {
+                "test": "echo \"Error: no test specified\" && exit 1"
+              },
+              "author": "Raydo Matthee",
+              "license": "ISC",
+              "dependencies": {}
+            }' > package.json
+          fi
+
       - name: Install dependencies
         run: npm install
 
