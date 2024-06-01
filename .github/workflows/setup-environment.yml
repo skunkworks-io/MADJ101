@@ -9,8 +9,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          node-version: '20'
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -40,6 +38,7 @@ jobs:
           echo "# Exercises" > course-materials/exercises/README.md
           echo "# Resources" > course-materials/resources/README.md
           echo "# Practical Lab Work" > practical-lab-work/README.md
+
           echo '<!DOCTYPE html>
 <html lang="en">
 <head>
