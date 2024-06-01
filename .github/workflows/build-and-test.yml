@@ -1,0 +1,75 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Create package.json if not exists
+        run: |
+          if [ ! -f package.json ]; then
+            echo '{
+              "name": "madj101",
+              "version": "1.0.0",
+              "description": "Mobile App Development for Juniors",
+              "main": "index.js",
+              "scripts": {
+                "test": "echo \"Error: no test specified\" && exit 1"
+              },
+              "author": "Raydo Matthee",
+              "license": "ISC",
+              "dependencies": {}
+            }' > package.json
+          fi
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Verify HTML, CSS, and JavaScript
+        run: |
+          npx html-validate web-portal/index.html
+          npx stylelint "web-portal/css/**/*.css"
+          npx eslint web-portal/js/**/*.js
+
+      - name: Create quiz page
+        run: |
+            npx stylelint "web-portal/css/**/*.css"
+            npx eslint web-portal/js/**/*.js
+                echo -e "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Quiz</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap\" rel=\"stylesheet\">\n    <link rel=\"stylesheet\" href=\"css/styles.css\">\n</head>\n<body>\n    <header>\n        <h1>Course Quiz</h1>\n    </header>\n    <main>\n        <section id=\"quiz-content\">\n            <form id=\"quiz-form\">\n                <h2>Question 1</h2>\n                <p>What is the purpose of an MVP?</p>\n                <input type=\"radio\" name=\"question1\" value=\"A\"> A. To develop a full-featured product<br>\n                <input type=\"radio\" name=\"question1\" value=\"B\"> B. To gather early feedback<br>\n                <input type=\"radio\" name=\"question1\" value=\"C\"> C. To avoid user testing<br>\n                <h2>Question 2</h2>\n                <p>Which tool is used for version control?</p>\n                <input type=\"radio\" name=\"question2\" value=\"A\"> Git<br>\n                <input type=\"radio\" name=\"question2\" value=\"B\"> Docker<br>\n                <input type=\"radio\" name=\"question2\" value=\"C\"> Jenkins<br>\n                <button type=\"button\" onclick=\"submitQuiz()\">Submit</button>\n            </form>\n        </section>\n    </main>\n    <footer>\n        <p>&copy; 2024 Skunkworks (Pty) Ltd. All rights reserved.</p>\n    </footer>\n    <script src=\"https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js\"></script>\n    <script src=\"https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js\"></script>\n    <script src=\"https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js\"></script>\n    <script src=\"js/scripts.js\"></script>\n</body>\n</html>' > web-portal/quiz.html
+
+            - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+            name: logs
+            path: web-portal
+        - name: build-artifacts
+            path: web-portal
+
+      - name: Collect and upload logs
+        run: |
+          mkdir -p logs
+          cp ~/.npm/_logs/*.log logs/
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs
+          path: logs
+
+      - name: Notify failure
+        if: failure()
+        run: echo "Build or setup failed. Please check the logs for more details."
