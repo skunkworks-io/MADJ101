@@ -1,4 +1,4 @@
-name: Setup Course Portal 
+name: Setup Course Portal
 
 on:
   push:
@@ -47,17 +47,17 @@ jobs:
           echo "# Exercises" > course-materials/exercises/README.md
           echo "# Resources" > course-materials/resources/README.md
           echo "# Practical Lab Work" > practical-lab-work/README.md
-          echo "<!DOCTYPE html>
-<html lang='en'>
+          echo '<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mobile App Development for Juniors</title>
-    <link href='https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap' rel='stylesheet'>
-    <link rel='stylesheet' href='css/styles.css'>
-    <script src=\"https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js\"></script>
-    <script src=\"https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js\"></script>
-    <script src=\"https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js\"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
     <header>
@@ -67,28 +67,28 @@ jobs:
     </header>
     <nav>
         <ul>
-            <li><a href='lectures.html'>Lectures</a></li>
-            <li><a href='exercises.html'>Exercises</a></li>
-            <li><a href='resources.html'>Resources</a></li>
-            <li><a href='practical-lab.html'>Practical Lab Work</a></li>
+            <li><a href="lectures.html">Lectures</a></li>
+            <li><a href="exercises.html">Exercises</a></li>
+            <li><a href="resources.html">Resources</a></li>
+            <li><a href="practical-lab.html">Practical Lab Work</a></li>
         </ul>
     </nav>
     <main>
-        <section id='content'>
+        <section id="content">
             <h2>Welcome to the Course Portal</h2>
             <p>Navigate through the sections to access course materials and lab exercises.</p>
-            <div id=\"auth-container\">
-                <div id=\"login-form\">
+            <div id="auth-container">
+                <div id="login-form">
                     <h3>Login</h3>
-                    <input type=\"email\" id=\"login-email\" placeholder=\"Email\">
-                    <input type=\"password\" id=\"login-password\" placeholder=\"Password\">
-                    <button onclick=\"login()\">Login</button>
+                    <input type="email" id="login-email" placeholder="Email">
+                    <input type="password" id="login-password" placeholder="Password">
+                    <button onclick="login()">Login</button>
                 </div>
-                <div id=\"register-form\">
+                <div id="register-form">
                     <h3>Register</h3>
-                    <input type=\"email\" id=\"register-email\" placeholder=\"Email\">
-                    <input type=\"password\" id=\"register-password\" placeholder=\"Password\">
-                    <button onclick=\"register()\">Register</button>
+                    <input type="email" id="register-email" placeholder="Email">
+                    <input type="password" id="register-password" placeholder="Password">
+                    <button onclick="register()">Register</button>
                 </div>
             </div>
         </section>
@@ -96,13 +96,13 @@ jobs:
     <footer>
         <p>&copy; 2024 Skunkworks (Pty) Ltd. All rights reserved.</p>
     </footer>
-    <script src='js/scripts.js'></script>
+    <script src="js/scripts.js"></script>
 </body>
-</html>" > web-portal/index.html
+</html>' > web-portal/index.html
 
-          echo "/* CSS styles for the course portal */
+          echo '/* CSS styles for the course portal */
 body {
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: "IBM Plex Sans", sans-serif;
     background-color: #f4f4f9;
     color: #333;
     margin: 0;
@@ -160,16 +160,16 @@ footer {
     position: fixed;
     width: 100%;
     bottom: 0;
-}" > web-portal/css/styles.css
+}' > web-portal/css/styles.css
 
-          echo "// Firebase configuration
+          echo '// Firebase configuration
 const firebaseConfig = {
-    apiKey: \"YOUR_FIREBASE_API_KEY\",
-    authDomain: \"YOUR_FIREBASE_AUTH_DOMAIN\",
-    projectId: \"YOUR_FIREBASE_PROJECT_ID\",
-    storageBucket: \"YOUR_FIREBASE_STORAGE_BUCKET\",
-    messagingSenderId: \"YOUR_FIREBASE_MESSAGING_SENDER_ID\",
-    appId: \"YOUR_FIREBASE_APP_ID\"
+    apiKey: "YOUR_FIREBASE_API_KEY",
+    authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
+    projectId: "YOUR_FIREBASE_PROJECT_ID",
+    storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
+    appId: "YOUR_FIREBASE_APP_ID"
 };
 
 // Initialize Firebase
@@ -179,29 +179,29 @@ const db = firebase.firestore();
 
 // Login function
 function login() {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
     auth.signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             const user = userCredential.user;
-            alert(\"Login successful!\");
+            alert("Login successful!");
             // Redirect to course materials page or update UI accordingly
         })
         .catch((error) => {
-            alert(\"Login failed: \" + error.message);
+            alert("Login failed: " + error.message);
         });
 }
 
 // Register function
 function register() {
-    const email = document.getElementById('register-email').value;
-    const password = document.getElementById('register-password').value;
+    const email = document.getElementById("register-email").value;
+    const password = document.getElementById("register-password").value;
     auth.createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
             const user = userCredential.user;
-            alert(\"Registration successful!\");
+            alert("Registration successful!");
             // Save user data to Firestore
-            db.collection(\"users\").doc(user.uid).set({
+            db.collection("users").doc(user.uid).set({
                 email: email,
                 progress: {
                     lectures: [],
@@ -212,7 +212,7 @@ function register() {
             // Redirect to course materials page or update UI accordingly
         })
         .catch((error) => {
-            alert(\"Registration failed: \" + error.message);
+            alert("Registration failed: " + error.message);
         });
 }
 
@@ -220,16 +220,16 @@ function register() {
 function updateProgress(section, item) {
     const user = auth.currentUser;
     if (user) {
-        const userDocRef = db.collection(\"users\").doc(user.uid);
+        const userDocRef = db.collection("users").doc(user.uid);
         userDocRef.update({
-            [`progress.${section}`]: firebase.firestore.FieldValue.arrayUnion(item)
+            ["progress." + section]: firebase.firestore.FieldValue.arrayUnion(item)
         }).then(() => {
-            alert(\"Progress updated!\");
+            alert("Progress updated!");
         }).catch((error) => {
-            alert(\"Error updating progress: \" + error.message);
+            alert("Error updating progress: " + error.message);
         });
     } else {
-        alert(\"No user logged in!\");
+        alert("No user logged in!");
     }
 }
 
@@ -237,65 +237,65 @@ function updateProgress(section, item) {
 function submitQuiz() {
     const user = auth.currentUser;
     if (user) {
-        const form = document.getElementById('quiz-form');
+        const form = document.getElementById("quiz-form");
         const answers = {
-            question1: form.elements['question1'].value,
-            question2: form.elements['question2'].value
+            question1: form.elements["question1"].value,
+            question2: form.elements["question2"].value
         };
-        db.collection(\"users\").doc(user.uid).collection(\"assessments\").add({
+        db.collection("users").doc(user.uid).collection("assessments").add({
             quiz: answers,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => {
-            alert(\"Quiz submitted!\");
+            alert("Quiz submitted!");
         }).catch((error) => {
-            alert(\"Error submitting quiz: \" + error.message);
+            alert("Error submitting quiz: " + error.message);
         });
     } else {
-        alert(\"No user logged in!\");
+        alert("No user logged in!");
     }
-}" > web-portal/js/scripts.js
+}' > web-portal/js/scripts.js
 
       - name: Create quiz page
         run: |
-          echo "<!DOCTYPE html>
-<html lang='en'>
+          echo '<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz</title>
-    <link href='https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap' rel='stylesheet'>
-    <link rel='stylesheet' href='css/styles.css'>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <header>
         <h1>Course Quiz</h1>
     </header>
     <main>
-        <section id='quiz-content'>
-            <form id=\"quiz-form\">
+        <section id="quiz-content">
+            <form id="quiz-form">
                 <h2>Question 1</h2>
                 <p>What is the purpose of an MVP?</p>
-                <input type=\"radio\" name=\"question1\" value=\"A\"> A. To develop a full-featured product<br>
-                <input type=\"radio\" name=\"question1\" value=\"B\"> B. To gather early feedback<br>
-                <input type=\"radio\" name=\"question1\" value=\"C\"> C. To avoid user testing<br>
+                <input type="radio" name="question1" value="A"> A. To develop a full-featured product<br>
+                <input type="radio" name="question1" value="B"> B. To gather early feedback<br>
+                <input type="radio" name="question1" value="C"> C. To avoid user testing<br>
                 <h2>Question 2</h2>
                 <p>Which tool is used for version control?</p>
-                <input type=\"radio\" name=\"question2\" value=\"A\"> A. Git<br>
-                <input type=\"radio\" name=\"question2\" value=\"B\"> B. Docker<br>
-                <input type=\"radio\" name=\"question2\" value=\"C\"> Jenkins<br>
-                <button type=\"button\" onclick=\"submitQuiz()\">Submit</button>
+                <input type="radio" name="question2" value="A"> A. Git<br>
+                <input type="radio" name="question2" value="B"> B. Docker<br>
+                <input type="radio" name="question2" value="C"> Jenkins<br>
+                <button type="button" onclick="submitQuiz()">Submit</button>
             </form>
         </section>
     </main>
     <footer>
         <p>&copy; 2024 Skunkworks (Pty) Ltd. All rights reserved.</p>
     </footer>
-    <script src=\"https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js\"></script>
-    <script src=\"https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js\"></script>
-    <script src=\"https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js\"></script>
-    <script src='js/scripts.js'></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="js/scripts.js"></script>
 </body>
-</html>" > web-portal/quiz.html
+</html>' > web-portal/quiz.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
