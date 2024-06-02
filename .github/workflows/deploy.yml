@@ -20,8 +20,8 @@ jobs:
 
       - name: Create package.json if it doesn't exist
         run: |
-                if [ ! -f package.json ]; then
-                 cat <<EOF > package.json
+       if [ ! -f package.json ]; then
+          cat <<EOF > package.json
             { 
                "name": "madj101",
                "version": "1.0.0",
@@ -46,9 +46,9 @@ jobs:
                 "@babel/preset-env": "^7.0.0",
                 "babel-loader": "^8.0.0"
              }
-         }
-          EOF
-            fi
+          }
+         EOF
+       fi
 
              - name: Create webpack.config.js if it doesn't exist
          run: |
