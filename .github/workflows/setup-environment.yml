@@ -210,7 +210,7 @@ jobs:
                 }
             });
             // Redirect to course materials page or update UI accordingly
-         })
+          })
          .catch((error) => {
             alert("Registration failed: " + error.message);
          });
