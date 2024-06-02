@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+        node-version: '16'
 
       - name: Create directories for course
         run: |
@@ -210,11 +210,19 @@ jobs:
                 }
             });
             // Redirect to course materials page or update UI accordingly
+<<<<<<< HEAD
          })
          .catch((error) => {
             alert("Registration failed: " + error.message);
          });
          }
+=======
+          })
+          .catch((error) => {
+            alert("Registration failed: " + error.message);
+          });
+          }
+>>>>>>> 405b6b656eff98b8543fe6c029fba92f5c45b99c
 
           // Function to update progress
           function updateProgress(section, item) {

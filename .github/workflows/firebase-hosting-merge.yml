@@ -27,13 +27,128 @@ jobs:
               "description": "Mobile App Development for Juniors",
               "main": "index.js",
               "scripts": {
-                "test": "echo \"Error: no test specified\" && exit 1"
+                "test": "echo \"Error: no test specified\" && exit 1",
+                "build": "webpack --config webpack.config.js"
               },
               "author": "Raydo Matthee",
               "license": "ISC",
-              "dependencies": {}
+              "dependencies": {
+                "webpack": "^5.0.0",
+                "webpack-cli": "^4.0.0"
+              }
             }' > package.json
           fi
+
+      - name: Create webpack.config.js if it doesn't exist
+        run: |
+          if [ ! -f webpack.config.js ]; then
+            echo 'const path = require("path");
+
+          module.exports = {
+          entry: "./web-portal/js/scripts.js",
+          output: {
+          filename: "bundle.js",
+          path: path.resolve(__dirname, "web-portal/js")
+          },
+          mode: "production"
+          };' > webpack.config.js
+          fi
+
+      - name: Create initial course files
+        run: |
+          mkdir -p web-portal/js
+          echo "// Firebase configuration
+          const firebaseConfig = {
+          apiKey: \"${{ secrets.AISTUDIO_API_KEY }}\",
+          authDomain: \"course-madj101.firebaseapp.com\",
+          projectId: \"course-madj101\",
+          storageBucket: \"course-madj101.appspot.com\",
+          messagingSenderId: \"491294238145\",
+          appId: \"1:491294238145:web:66bcaff49ae8f7faed3b40\",
+          measurementId: \"G-GDQCV0XQVJ\"
+          };
+
+          // Initialize Firebase
+          firebase.initializeApp(firebaseConfig);
+          const auth = firebase.auth();
+          const db = firebase.firestore();
+
+          // Login function
+          function login() {
+          const email = document.getElementById(\"login-email\").value;
+          const password = document.getElementById(\"login-password\").value;
+          auth.signInWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+          const user = userCredential.user;
+          alert(\"Login successful!\");
+          // Redirect to course materials page or update UI accordingly
+          })
+          .catch((error) => {
+          alert(\"Login failed: \" + error.message);
+          });
+          }
+
+          // Register function
+          function register() {
+          const email = document.getElementById(\"register-email\").value;
+          const password = document.getElementById(\"register-password\").value;
+          auth.createUserWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+          const user = userCredential.user;
+          alert(\"Registration successful!\");
+          // Save user data to Firestore
+          db.collection(\"users\").doc(user.uid).set({
+          email: email,
+          progress: {
+          lectures: [],
+          exercises: [],
+          labWork: []
+          }
+          });
+          // Redirect to course materials page or update UI accordingly
+          })
+          .catch((error) => {
+          alert(\"Registration failed: \" + error.message);
+          });
+          }
+
+          // Function to update progress
+          function updateProgress(section, item) {
+          const user = auth.currentUser;
+          if (user) {
+          const userDocRef = db.collection(\"users\").doc(user.uid);
+          userDocRef.update({
+          [\"progress.\" + section]: firebase.firestore.FieldValue.arrayUnion(item)
+          }).then(() => {
+          alert(\"Progress updated!\");
+          }).catch((error) => {
+          alert(\"Error updating progress: \" + error.message);
+          });
+          } else {
+          alert(\"No user logged in!\");
+          }
+          }
+
+          // Function to submit quiz
+          function submitQuiz() {
+          const user = auth.currentUser;
+          if (user) {
+          const form = document.getElementById(\"quiz-form\");
+          const answers = {
+          question1: form.elements[\"question1\"].value,
+          question2: form.elements[\"question2\"].value
+          };
+          db.collection(\"users\").doc(user.uid).collection(\"assessments\").add({
+          quiz: answers,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          }).then(() => {
+          alert(\"Quiz submitted!\");
+          }).catch((error) => {
+          alert(\"Error submitting quiz: \" + error.message);
+          });
+          } else {
+          alert(\"No user logged in!\");
+          }" > web-portal/js/scripts.js
 
       - name: Install dependencies
         run: |
