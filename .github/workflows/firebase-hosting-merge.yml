@@ -47,8 +47,9 @@ jobs:
       - name: Create webpack.config.js if it doesn't exist
         run: |
           if [ ! -f webpack.config.js ]; then
-           echo 'const path = require("path");
-           module.exports = {
+            echo 'const path = require("path");
+
+          module.exports = {
             entry: "./web-portal/js/scripts.js",
             output: {
               filename: "bundle.js",
@@ -76,7 +77,7 @@ jobs:
                   run: |
                     mkdir -p web-portal/js
                     echo "// Firebase configuration
-            const firebaseConfig = {
+          const firebaseConfig = {
             apiKey: \"${{ secrets.AISTUDIO_API_KEY }}\",
             authDomain: \"course-madj101.firebaseapp.com\",
             projectId: \"course-madj101\",
