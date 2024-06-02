@@ -211,10 +211,10 @@ jobs:
             });
             // Redirect to course materials page or update UI accordingly
           })
-         .catch((error) => {
+          .catch((error) => {
             alert("Registration failed: " + error.message);
-         });
-         }
+          });
+          }
 
           // Function to update progress
           function updateProgress(section, item) {
