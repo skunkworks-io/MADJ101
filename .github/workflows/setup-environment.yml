@@ -258,4 +258,63 @@ function submitQuiz() {
     <title>Quiz</title>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
-</head
+</head>
+<body>
+    <header>
+        <h1>Course Quiz</h1>
+    </header>
+    <main>
+        <section id="quiz-content">
+            <form id="quiz-form">
+                <h2>Question 1</h2>
+                <p>What is the purpose of an MVP?</p>
+                <input type="radio" name="question1" value="A"> A. To develop a full-featured product<br>
+                <input type="radio" name="question1" value="B"> B. To gather early feedback<br>
+                <input type="radio" name="question1" value="C"> C. To avoid user testing<br>
+                <h2>Question 2</h2>
+                <p>Which tool is used for version control?</p>
+                <input type="radio" name="question2" value="A"> A. Git<br>
+                <input type="radio" name="question2" value="B"> B. Docker<br>
+                <input type="radio" name="question2" value="C"> Jenkins<br>
+                <button type="button" onclick="submitQuiz()">Submit</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Skunkworks (Pty) Ltd. All rights reserved.</p>
+    </footer>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="js/scripts.js"></script>
+</body>
+</html>' > web-portal/quiz.html
+
+      - name: Create package.json
+        run: |
+          if [ ! -f package.json ]; then
+            echo '{
+              "name": "madj101",
+              "version": "1.0.0",
+              "description": "Mobile App Development for Juniors",
+              "main": "index.js",
+              "scripts": {
+                "test": "echo \\"Error: no test specified\\" && exit 1"
+              },
+              "author": "Raydo Matthee",
+              "license": "ISC",
+              "dependencies": {}
+            }' > package.json
+          fi
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_COURSE_MADJ101 }}
+          channelId: live
+          projectId: course-madj101
