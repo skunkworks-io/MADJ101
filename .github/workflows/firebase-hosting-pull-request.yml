@@ -44,15 +44,14 @@ jobs:
         run: |
           if [ ! -f webpack.config.js ]; then
             echo 'const path = require("path");
-
-module.exports = {
-  entry: "./web-portal/js/scripts.js",
-  output: {
-    filename: "bundle.js",
-    path: path.resolve(__dirname, "web-portal/js")
-  },
-  mode: "production"
-};' > webpack.config.js
+            module.exports = {
+            entry: "./web-portal/js/scripts.js",
+            output: {
+            filename: "bundle.js",
+            path: path.resolve(__dirname, "web-portal/js")
+            },
+            mode: "production"
+            };' > webpack.config.js
           fi
 
       - name: Install dependencies
