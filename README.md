@@ -1,4 +1,4 @@
-# í´¥í¼Ž Firebase Hosting GitHub Action
+# Firebase Hosting GitHub Action
 
 - Creates a new preview channel (and its associated preview URL) for every PR on your GitHub repository.
 - Adds a comment to the PR with the preview URL so that you and each reviewer can view and test the PR's changes in a "preview" version of your app.
