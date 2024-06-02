@@ -1,109 +1,38 @@
-name: Build and Test
+name: Build and Deploy
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Create package.json if not exists
+      - name: Install dependencies
         run: |
-          if [ ! -f package.json ]; then
-            echo '{
-              "name": "madj101",
-              "version": "1.0.0",
-              "description": "Mobile App Development for Juniors",
-              "main": "index.js",
-              "scripts": {
-                "test": "echo \"Error: no test specified\" && exit 1"
-              },
-              "author": "Raydo Matthee",
-              "license": "ISC",
-              "dependencies": {}
-            }' > package.json
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
           fi
 
-      - name: Install dependencies
-        run: npm install
+      - name: Build project
+        run: npm run build
 
-      - name: Verify HTML, CSS, and JavaScript
-        run: |
-          npx html-validate web-portal/index.html
-          npx stylelint "web-portal/css/**/*.css"
-          npx eslint web-portal/js/**/*.js
-
-      - name: Create quiz page
-        run: |
-          echo '<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-    <header>
-        <h1>Course Quiz</h1>
-    </header>
-    <main>
-        <section id="quiz-content">
-            <form id="quiz-form">
-                <h2>Question 1</h2>
-                <p>What is the purpose of an MVP?</p>
-                <input type="radio" name="question1" value="A"> A. To develop a full-featured product<br>
-                <input type="radio" name="question1" value="B"> B. To gather early feedback<br>
-                <input type="radio" name="question1" value="C"> C. To avoid user testing<br>
-                <h2>Question 2</h2>
-                <p>Which tool is used for version control?</p>
-                <input type="radio" name="question2" value="A"> Git<br>
-                <input type="radio" name="question2" value="B"> Docker<br>
-                <input type="radio" name="question2" value="C"> Jenkins<br>
-                <button type="button" onclick="submitQuiz()">Submit</button>
-            </form>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 Skunkworks (Pty) Ltd. All rights reserved.</p>
-    </footer>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <script src="js/scripts.js"></script>
-</body>
-</html>' > web-portal/quiz.html
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          name: build-artifacts
-          path: web-portal
-
-      - name: Collect and upload logs
-        run: |
-          mkdir -p logs
-          cp ~/.npm/_logs/*.log logs/
-        uses: actions/upload-artifact@v3
-        with:
-          name: logs
-          path: logs
-
-      - name: Notify failure
-        if: failure()
-        run: echo "Build or setup failed. Please check the logs for more details."
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: course-madj101
+          channelId: live

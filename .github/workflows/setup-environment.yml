@@ -1,6 +1,9 @@
 name: Setup Environment
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   setup-environment:
@@ -8,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -38,7 +41,6 @@ jobs:
           echo "# Exercises" > course-materials/exercises/README.md
           echo "# Resources" > course-materials/resources/README.md
           echo "# Practical Lab Work" > practical-lab-work/README.md
-
           echo '<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -156,7 +158,7 @@ footer {
 
           echo '// Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBkynA5-7Ir9ULqzYsAFEZXvK0717kTub0",
+    apiKey: "${{ secrets.AISTUDIO_API_KEY }}",
     authDomain: "course-madj101.firebaseapp.com",
     projectId: "course-madj101",
     storageBucket: "course-madj101.appspot.com",
@@ -245,3 +247,15 @@ function submitQuiz() {
         alert("No user logged in!");
     }
 }' > web-portal/js/scripts.js
+
+      - name: Create quiz page
+        run: |
+          echo '<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head
