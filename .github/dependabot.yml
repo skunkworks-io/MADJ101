@@ -1,0 +1,19 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "npm" # Possible values include "npm", "pip", "maven", "gradle", etc.
+    directory: "/" # Location of package manifests (e.g., "/" for the root directory)
+    schedule:
+      interval: "weekly" # Possible values include "daily", "weekly", "monthly"
+  - package-ecosystem: "pip"
+    directory: "/path/to/your/python/project"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "maven"
+    directory: "/path/to/your/java/project"
+    schedule:
+      interval: "weekly"
