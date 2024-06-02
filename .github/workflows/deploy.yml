@@ -3,7 +3,7 @@ name: Deploy to Firebase Hosting on Push
 on:
   push:
     branches:
-      - main
+        - main
 
 jobs:
   deploy:
@@ -16,40 +16,44 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '16'
 
       - name: Create package.json if it doesn't exist
         run: |
-          if [ ! -f package.json ]; then
-            cat <<EOF > package.json
-            {
-            "name": "madj101",
-            "version": "1.0.0",
+                if [ ! -f package.json ]; then
+                 cat <<EOF > package.json
+            { 
+               "name": "madj101",
+               "version": "1.0.0",
             "description": "Mobile App Development for Juniors",
             "main": "index.js",
-            "scripts": {
-                "test": "echo \"Error: no test specified\" && exit 1",
-                "build": "webpack --config webpack.config.js"
-            },
+            "scripts": {}
+            }
+            "test": "echo \"Error: no test specified\" && exit 1",
+            "build": "webpack --config webpack.config.js"
             "author": "Raydo Matthee",
             "license": "ISC",
-            "dependencies": {
+            "dependencies": {   
+            }
+                  "author": "Raydo Matthee",
+           "license": "ISC",
+           "dependencies": {
                 "webpack": "^5.0.0",
                 "webpack-cli": "^4.0.0"
-            },
-            "devDependencies": {
+             }
+                "devDependencies": {
                 "@babel/core": "^7.0.0",
                 "@babel/preset-env": "^7.0.0",
                 "babel-loader": "^8.0.0"
-            }
-            }
-            EOF
-                    fi
+             }
+         }
+          EOF
+            fi
 
-                - name: Create webpack.config.js if it doesn't exist
-                    run: |
-                    if [ ! -f webpack.config.js ]; then
-                        cat <<EOF > webpack.config.js
+             - name: Create webpack.config.js if it doesn't exist
+         run: |
+                 if [ ! -f webpack.config.js ]; then
+                    cat <<EOF > webpack.config.js
             const path = require("path");
 
             module.exports = {
@@ -68,13 +72,7 @@ jobs:
                     loader: "babel-loader",
                     options: {
                         presets: ["@babel/preset-env"]
-                    }
-                    }
-                }
-                ]
-            }
-          }; 
-          EOF
+                              EOF
           fi
 
       - name: Install dependencies
