@@ -1,178 +1,385 @@
-# Firebase Hosting GitHub Action
+Here's the complete guide to set up your project and GitHub Actions workflows for the `MADJ101` repository hosted on GitHub.
 
-- Creates a new preview channel (and its associated preview URL) for every PR on your GitHub repository.
-- Adds a comment to the PR with the preview URL so that you and each reviewer can view and test the PR's changes in a "preview" version of your app.
-- Updates the preview URL with changes from each commit by automatically deploying to the associated preview channel. The URL doesn't change with each new commit.
-- (Optional) Deploys the current state of your GitHub repo to your live channel when the PR is merged.
+### Step-by-Step Guide to Create and Deploy a Mobile App Development Portal
 
-## Setup
+#### 1. Set Up Your Development Environment
 
-A full setup guide can be found [in the Firebase Hosting docs](https://firebase.google.com/docs/hosting/github-integration).
+1. **Install Node.js and npm**:
+   - Download and install Node.js from [nodejs.org](https://nodejs.org/).
+   - Verify the installation by running the following commands in your terminal:
+     ```bash
+     node -v
+     npm -v
+     ```
 
-The [Firebase CLI](https://firebase.google.com/docs/cli) can get you set up quickly with a default configuration.
+2. **Install Firebase CLI**:
+   - Run the following command to install Firebase CLI globally:
+     ```bash
+     npm install -g firebase-tools
+     ```
 
-- If you've NOT set up Hosting, run this version of the command from the root of your local directory:
+#### 2. Clone the Repository
 
-```bash
-firebase init hosting
-```
+1. **Clone Your Repository**:
+   - Clone the `MADJ101` repository to your local machine:
+     ```bash
+     git clone https://github.com/skunkworksza/MADJ101.git
+     cd MADJ101
+     ```
 
-- If you've ALREADY set up Hosting, then you just need to set up the GitHub Action part of Hosting.
-  Run this version of the command from the root of your local directory:
+#### 3. Initialize Firebase in Your Project
 
-```bash
-firebase init hosting:github
-```
+1. **Create a New Firebase Project**:
+   - Go to the [Firebase Console](https://console.firebase.google.com/).
+   - Click on "Add project" and follow the instructions to create a new project.
 
-## Usage
+2. **Initialize Firebase in Your Local Project**:
+   - Run the following command to set up Firebase Hosting:
+     ```bash
+     firebase init hosting
+     ```
+   - Follow the prompts to configure Firebase Hosting for your project.
 
-### Deploy to a new preview channel for every PR
+#### 4. Create the Project Structure
 
-Add a workflow (`.github/workflows/deploy-preview.yml`):
+1. **Set Up Directory Structure**:
+   - Create the following directories:
+     ```bash
+     mkdir -p course-materials/lectures
+     mkdir -p course-materials/exercises
+     mkdir -p course-materials/resources
+     mkdir -p practical-lab-work
+     mkdir -p web-portal/css
+     mkdir -p web-portal/js
+     mkdir -p web-portal/assets
+     ```
 
-```yaml
-name: Deploy to Preview Channel
+2. **Create Initial Files**:
+   - Create `README.md` files in `course-materials/lectures`, `course-materials/exercises`, `course-materials/resources`, and `practical-lab-work`:
+     ```bash
+     echo "# Lectures" > course-materials/lectures/README.md
+     echo "# Exercises" > course-materials/exercises/README.md
+     echo "# Resources" > course-materials/resources/README.md
+     echo "# Practical Lab Work" > practical-lab-work/README.md
+     ```
+   - Create `index.html` in `web-portal`:
+     ```html
+     <!DOCTYPE html>
+     <html lang="en">
+     <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>Mobile App Development for Juniors</title>
+         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
+         <link rel="stylesheet" href="css/styles.css">
+         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+     </head>
+     <body>
+         <header>
+             <h1>Mobile App Development for Juniors</h1>
+             <h2>Course Code: MADJ101</h2>
+             <h3>Building Foundational Skills for Future App Developers</h3>
+         </header>
+         <nav>
+             <ul>
+                 <li><a href="lectures.html">Lectures</a></li>
+                 <li><a href="exercises.html">Exercises</a></li>
+                 <li><a href="resources.html">Resources</a></li>
+                 <li><a href="practical-lab.html">Practical Lab Work</a></li>
+             </ul>
+         </nav>
+         <main>
+             <section id="content">
+                 <h2>Welcome to the Course Portal</h2>
+                 <p>Navigate through the sections to access course materials and lab exercises.</p>
+                 <div id="auth-container">
+                     <div id="login-form">
+                         <h3>Login</h3>
+                         <input type="email" id="login-email" placeholder="Email">
+                         <input type="password" id="login-password" placeholder="Password">
+                         <button onclick="login()">Login</button>
+                     </div>
+                     <div id="register-form">
+                         <h3>Register</h3>
+                         <input type="email" id="register-email" placeholder="Email">
+                         <input type="password" id="register-password" placeholder="Password">
+                         <button onclick="register()">Register</button>
+                     </div>
+                 </div>
+             </section>
+         </main>
+         <footer>
+             <p>&copy; 2024 Skunkworks (Pty) Ltd. All rights reserved.</p>
+         </footer>
+         <script src="js/scripts.js"></script>
+     </body>
+     </html>
+     ```
 
-on:
-  pull_request:
-    # Optionally configure to run only for specific files. For example:
-    # paths:
-    # - "website/**"
+   - Create `styles.css` in `web-portal/css`:
+     ```css
+     /* CSS styles for the course portal */
+     body {
+         font-family: "IBM Plex Sans", sans-serif;
+         background-color: #f4f4f9;
+         color: #333;
+         margin: 0;
+         padding: 0;
+     }
+     header {
+         background-color: #1a73e8;
+         color: white;
+         text-align: center;
+         padding: 20px 0;
+         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+     }
+     header h1 {
+         font-size: 2.5em;
+         margin: 0.2em 0;
+         font-weight: 700;
+     }
+     header h2 {
+         font-size: 1.2em;
+         margin: 0.2em 0;
+         font-weight: 400;
+     }
+     header h3 {
+         font-size: 1em;
+         margin: 0.2em 0;
+         font-weight: 400;
+     }
+     nav ul {
+         list-style: none;
+         padding: 0;
+         display: flex;
+         justify-content: center;
+         background-color: #1a73e8;
+         margin: 0;
+     }
+     nav ul li {
+         margin: 0 15px;
+     }
+     nav ul li a {
+         color: white;
+         text-decoration: none;
+         font-weight: 700;
+     }
+     nav ul li a:hover {
+         text-decoration: underline;
+     }
+     main {
+         padding: 20px;
+     }
+     footer {
+         text-align: center;
+         padding: 10px 0;
+         background-color: #1a73e8;
+         color: white;
+         position: fixed;
+         width: 100%;
+         bottom: 0;
+     }
+     ```
 
-jobs:
-  build_and_preview:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      # Add any build steps here. For example:
-      # - run: npm ci && npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
-          expires: 30d
-          projectId: your-Firebase-project-ID
-```
+   - Create `scripts.js` in `web-portal/js`:
+     ```javascript
+     // Firebase configuration
+     const firebaseConfig = {
+         apiKey: "YOUR_API_KEY",
+         authDomain: "course-madj101.firebaseapp.com",
+         projectId: "course-madj101",
+         storageBucket: "course-madj101.appspot.com",
+         messagingSenderId: "491294238145",
+         appId: "1:491294238145:web:66bcaff49ae8f7faed3b40",
+         measurementId: "G-GDQCV0XQVJ"
+     };
 
-### Deploy to your live channel on merge
+     // Initialize Firebase
+     firebase.initializeApp(firebaseConfig);
+     const auth = firebase.auth();
+     const db = firebase.firestore();
 
-Add a workflow (`.github/workflows/deploy-prod.yml`):
+     // Login function
+     function login() {
+         const email = document.getElementById("login-email").value;
+         const password = document.getElementById("login-password").value;
+         auth.signInWithEmailAndPassword(email, password)
+             .then((userCredential) => {
+                 const user = userCredential.user;
+                 alert("Login successful!");
+                 // Redirect to course materials page or update UI accordingly
+             })
+             .catch((error) => {
+                 alert("Login failed: " + error.message);
+             });
+     }
 
-```yaml
-name: Deploy to Live Channel
+     // Register function
+     function register() {
+         const email = document.getElementById("register-email").value;
+         const password = document.getElementById("register-password").value;
+         auth.createUserWithEmailAndPassword(email, password)
+             .then((userCredential) => {
+                 const user = userCredential.user;
+                 alert("Registration successful!");
+                 // Save user data to Firestore
+                 db.collection("users").doc(user.uid).set({
+                     email: email,
+                     progress: {
+                         lectures: [],
+                         exercises: [],
+                         labWork: []
+                     }
+                 });
+                 // Redirect to course materials page or update UI accordingly
+             })
+             .catch((error) => {
+                 alert("Registration failed: " + error.message);
+             });
+     }
 
-on:
-  push:
-    branches:
-      - main
-    # Optionally configure to run only for specific files. For example:
-    # paths:
-    # - "website/**"
+     // Function to update progress
+     function updateProgress(section, item) {
+         const user = auth.currentUser;
+         if (user) {
+             const userDocRef = db.collection("users").doc(user.uid);
+             userDocRef.update({
+                 ["progress." + section]: firebase.firestore.FieldValue.arrayUnion(item)
+             }).then(() => {
+                 alert("Progress updated!");
+             }).catch((error) => {
+                 alert("Error
 
-jobs:
-  deploy_live_website:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      # Add any build steps here. For example:
-      # - run: npm ci && npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
-          projectId: your-Firebase-project-ID
-          channelId: live
-```
+ updating progress: " + error.message);
+             });
+         } else {
+             alert("No user logged in!");
+         }
+     }
 
-## Options
+     // Function to submit quiz
+     function submitQuiz() {
+         const user = auth.currentUser;
+         if (user) {
+             const form = document.getElementById("quiz-form");
+             const answers = {
+                 question1: form.elements["question1"].value,
+                 question2: form.elements["question2"].value
+             };
+             db.collection("users").doc(user.uid).collection("assessments").add({
+                 quiz: answers,
+                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
+             }).then(() => {
+                 alert("Quiz submitted!");
+             }).catch((error) => {
+                 alert("Error submitting quiz: " + error.message);
+             });
+         } else {
+             alert("No user logged in!");
+         }
+     }
+     ```
 
-### `firebaseServiceAccount` _{string}_ (required)
+#### 5. Set Up GitHub Actions for Automated Deployments
 
-This is a service account JSON key. The easiest way to set it up is to run `firebase init hosting:github`. However, it can also be [created manually](./docs/service-account.md).
+1. **Create GitHub Actions Workflows**:
 
-It's important to store this token as an
-[encrypted secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets)
-to prevent unintended access to your Firebase project. Set it in the "Secrets" area
-of your repository settings and add it as `FIREBASE_SERVICE_ACCOUNT`:
-`https://github.com/USERNAME/REPOSITORY/settings/secrets`.
+   - Create `.github/workflows/deploy-preview.yml` for preview deployments:
+     ```yaml
+     name: Deploy to Preview Channel
 
-### `repoToken` _{string}_
+     on:
+       pull_request:
 
-Adding `repoToken: "${{secrets.GITHUB_TOKEN}}"` lets the action comment on PRs
-with the preview URL for the associated preview channel. You don't need to set
-this secret yourself - GitHub sets it automatically.
+     jobs:
+       build_and_preview:
+         runs-on: ubuntu-latest
+         steps:
+           - uses: actions/checkout@v4
+           - name: Set up Node.js
+             uses: actions/setup-node@v3
+             with:
+               node-version: '20'
+           - name: Install dependencies
+             run: |
+               if [ -f package-lock.json ]; then
+                 npm ci
+               else
+                 npm install
+               fi
+           - name: Build project
+             run: npm run build
+           - uses: FirebaseExtended/action-hosting-deploy@v0
+             with:
+               repoToken: "${{ secrets.GITHUB_TOKEN }}"
+               firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+               expires: 30d
+               projectId: course-madj101
+     ```
 
-If you omit this option, you'll need to find the preview URL in the action's
-build log.
+   - Create `.github/workflows/deploy-prod.yml` for live deployments:
+     ```yaml
+     name: Deploy to Live Channel
 
-### `expires` _{string}_
+     on:
+       push:
+         branches:
+           - main
 
-The length of time the preview channel should remain active after the last deploy.
-If left blank, the action uses the default expiry of 7 days.
-The expiry date will reset to this value on every new deployment.
+     jobs:
+       deploy_live_website:
+         runs-on: ubuntu-latest
+         steps:
+           - uses: actions/checkout@v4
+           - name: Set up Node.js
+             uses: actions/setup-node@v3
+             with:
+               node-version: '20'
+           - name: Install dependencies
+             run: |
+               if [ -f package-lock.json ]; then
+                 npm ci
+               else
+                 npm install
+               fi
+           - name: Build project
+             run: npm run build
+           - uses: FirebaseExtended/action-hosting-deploy@v0
+             with:
+               firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+               projectId: course-madj101
+               channelId: live
+     ```
 
-### `projectId` _{string}_
+2. **Add Secrets to Your GitHub Repository**:
+   - Go to your repository on GitHub.
+   - Navigate to "Settings" > "Secrets" > "Actions".
+   - Add the following secrets:
+     - `FIREBASE_SERVICE_ACCOUNT`: The JSON key of your Firebase service account.
+     - `GITHUB_TOKEN`: This is automatically available in GitHub Actions and doesn't need to be added manually.
 
-The Firebase project that contains the Hosting site to which you
-want to deploy. If left blank, you need to check in a `.firebaserc`
-file so that the Firebase CLI knows which Firebase project to use.
+#### 6. Final Steps
 
-### `channelId` _{string}_
+1. **Commit and Push Changes**:
+   - Add and commit all your changes:
+     ```bash
+     git add .
+     git commit -m "Initial commit with project setup and GitHub Actions"
+     ```
+   - Push to your repository:
+     ```bash
+     git push origin main
+     ```
 
-The ID of the channel to deploy to. If you leave this blank,
-a preview channel and its ID will be auto-generated per branch or PR.
-If you set it to **`live`**, the action deploys to the live channel of your default Hosting site.
+2. **Open a Pull Request**:
+   - Create a new branch for your feature or fix.
+   - Push the branch and open a pull request.
+   - Verify that the GitHub Action deploys to the preview channel.
 
-_You usually want to leave this blank_ so that each PR gets its own preview channel.
-An exception might be that you always want to deploy a certain branch to a
-long-lived preview channel (for example, you may want to deploy every commit
-from your `next` branch to a `preprod` preview channel).
+3. **Merge and Deploy to Live**:
+   - Once the pull request is reviewed and approved, merge it into the `main` branch.
+   - The GitHub Action will automatically deploy the changes to the live channel.
 
-### `target` _{string}_
-
-The target name of the Hosting site to deploy to. If you leave this blank,
-the default target or all targets defined in the `.firebaserc` will be deployed to.
-
-You usually want to leave this blank unless you have set up multiple sites in the Firebase Hosting UI
-and are trying to target just one of those sites with this action.
-
-Refer to the Hosting docs about [multiple sites](https://firebase.google.com/docs/hosting/multisites)
-for more information about deploy targets.
-
-### `entryPoint` _{string}_
-
-The directory containing your [`firebase.json`](https://firebase.google.com/docs/cli#the_firebasejson_file)
-file relative to the root of your repository. Defaults to `.` (the root of your repo).
-
-### `firebaseToolsVersion` _{string}_
-
-The version of `firebase-tools` to use. If not specified, defaults to `latest`.
-
-### `disableComment` _{boolean}_
-
-Disable commenting in a PR with the preview URL.
-
-## Outputs
-
-Values emitted by this action that can be consumed by other actions later in your workflow
-
-### `urls`
-
-The url(s) deployed to
-
-### `expire_time`
-
-The time the deployed preview urls expire, example: 2024-04-10T14:37:53.817800922Z
-
-### `expire_time_formatted`
-
-The time the deployed preview urls expire in the UTC format, example: Tue, 09 Apr 2024 18:24:42 GMT
-
-### `details_url`
-
-A single URL that was deployed to
-
-## Status
-
-![Status: Experimental](https://img.shields.io/badge/Status-Experimental-blue)
-
-This repository is maintained by Googlers but is not a supported Firebase product. Issues here are answered by maintainers and other community members on GitHub on a best-effort basis.
+This guide covers the setup and deployment of your Mobile App Development Portal using Firebase Hosting and GitHub Actions. If you have any questions or need further assistance, feel free to ask!
