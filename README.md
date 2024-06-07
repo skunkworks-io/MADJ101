@@ -1,5 +1,3 @@
-Here's the complete guide to set up your project and GitHub Actions workflows for the `MADJ101` repository hosted on GitHub.
-
 ### Step-by-Step Guide to Create and Deploy a Mobile App Development Portal
 
 #### 1. Set Up Your Development Environment
